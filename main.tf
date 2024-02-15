@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "ecr" {
   name = "${local.prefix}-ecr"
+  force_delete = true
 }
 
 module "ecs" {
@@ -23,13 +24,11 @@ module "ecs" {
 
       # Container definition(s)
       container_definitions = {
-
         ecs-sample = { #container name
           essential = true
           image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
           port_mappings = [
             {
-              name          = "ecs-sample" #container name
               containerPort = 8080
               protocol      = "tcp"
             }
@@ -54,4 +53,5 @@ module "ecs_sg" {
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["http-8080-tcp"]
+  egress_rules      = ["all-all"]
 }
