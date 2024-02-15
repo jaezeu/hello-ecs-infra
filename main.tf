@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ecr" {
-  name = "${local.prefix}-ecr"
+  name         = "${local.prefix}-ecr"
   force_delete = true
 }
 
@@ -21,7 +21,6 @@ module "ecs" {
     ecsdemo = { #task def and service name -> #Change
       cpu    = 512
       memory = 1024
-
       # Container definition(s)
       container_definitions = {
         ecs-sample = { #container name
@@ -53,5 +52,5 @@ module "ecs_sg" {
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["http-8080-tcp"]
-  egress_rules      = ["all-all"]
+  egress_rules        = ["all-all"]
 }
