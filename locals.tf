@@ -1,3 +1,0 @@
-locals {
-  prefix = "jaz-terraform"
-}
