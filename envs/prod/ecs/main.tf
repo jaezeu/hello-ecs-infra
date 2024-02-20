@@ -23,8 +23,8 @@ module "ecs" {
 
   services = {
     ecsdemo = { #task def and service name -> #Change
-      cpu    = 512
-      memory = 1024
+      cpu    = 512  #0.5vCPU
+      memory = 1024 #1GB
       # Container definition(s)
       container_definitions = {
         ecs-sample = { #container name
