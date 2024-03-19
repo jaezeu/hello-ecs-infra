@@ -22,15 +22,15 @@ resource "aws_iam_policy" "policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "test-attach" {
-  role       = module.jaz_ecs.task_exec_iam_role_name   #this is name of the upstream module's output. Output name: task_exec_iam_role_name 
+  role       = module.ecs.task_exec_iam_role_name   #this is name of the upstream module's output. Output name: task_exec_iam_role_name 
   policy_arn = aws_iam_policy.policy.arn
 
-  depends_on = [ module.jaz_ecs ]  #To wait for the module below to finish creating, so that the iam role name that is being referenced will exist
+  depends_on = [ module.ecs ]  #To wait for the module below to finish creating, so that the iam role name that is being referenced will exist
 }
 
-module "jaz_ecs" {   ##your local module name
+module "ecs" {   ##your local module name
   source  = "terraform-aws-modules/ecs/aws"
-  version = "~> 5.9.0"
+  version = "~> 5.10.0"
 
   cluster_name = "${local.prefix}-ecs"
 
