@@ -7,7 +7,28 @@ resource "aws_ecr_repository" "ecr" {
   force_delete = true
 }
 
-module "ecs" {
+data "aws_iam_policy_document" "policy" {
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "test-policy"
+  description = "A test policy"
+  policy      = data.aws_iam_policy_document.policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "test-attach" {
+  role       = module.jaz_ecs.task_exec_iam_role_name   #this is name of the upstream module's output. Output name: task_exec_iam_role_name 
+  policy_arn = aws_iam_policy.policy.arn
+
+  depends_on = [ module.jaz_ecs ]  #To wait for the module below to finish creating, so that the iam role name that is being referenced will exist
+}
+
+module "jaz_ecs" {   ##your local module name
   source  = "terraform-aws-modules/ecs/aws"
   version = "~> 5.9.0"
 
